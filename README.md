@@ -38,6 +38,9 @@ If you see
 `Cannot start container 8675309: Cannot link to a non running container` then
 just run `docker-compose up -d` again. I'm not sure how to prevent that.
 
+If you can not up go container, 
+try `docker-compose up go` to figure out errors
+
 [for more info](https://medium.com/@McMenemy/godorp-docker-compose-for-development-and-production-e37fe0a58d61)
 
 ## Testing

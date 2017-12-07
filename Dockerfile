@@ -1,4 +1,4 @@
-FROM golang:1.9.2
+FROM golang:1.9.2-alpine
 
 ARG app_env
 ENV APP_ENV $app_env
@@ -6,6 +6,7 @@ ENV APP_ENV $app_env
 COPY . /go/src/app
 WORKDIR /go/src/app
 
+RUN apk add --no-cache git mercurial
 RUN go get ./
 RUN go build
 
