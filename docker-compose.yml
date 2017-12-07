@@ -26,7 +26,7 @@ go:
         - "8080:8080" # host:container
     volumes:
         - ".:/go/src/app"
-    command: go run main.go
+    command: bash -c "go build && ./app"
 
 proxy:
     image: nginx:latest
