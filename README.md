@@ -40,6 +40,18 @@ just run `docker-compose up -d` again. I'm not sure how to prevent that.
 
 [for more info](https://medium.com/@McMenemy/godorp-docker-compose-for-development-and-production-e37fe0a58d61)
 
+## Testing
+With all of the test you’ve been writing for your Go application (right?!), you’ll probably want to run them inside of this environment as well. This is easy to do. We can run the following command in our terminal:
+```
+docker-compose run go go test -v ./...
+```
+
+### Environment Variable
+to see environment variable
+```
+docker-compose run go go env 
+```
+
 ## Files
 This is what each file is doing.
 

@@ -20,11 +20,11 @@ func main() {
 
 	connInfo := fmt.Sprintf(
 		"user=%s dbname=%s password=%s host=%s port=%s sslmode=disable",
-		"postgres",
-		"postgres",
+		os.Getenv("DB_ENV_POSTGRES_USER"),
+		os.Getenv("DB_ENV_POSTGRES_DBNAME"),
 		os.Getenv("DB_ENV_POSTGRES_PASSWORD"),
-		os.Getenv("GOTESTRESTAPIWITHPOSTGRES_POSTGRES_1_PORT_5432_TCP_ADDR"),
-		os.Getenv("GOTESTRESTAPIWITHPOSTGRES_POSTGRES_1_PORT_5432_TCP_PORT"),
+		os.Getenv("DB_PORT_5432_TCP_ADDR"),
+		os.Getenv("DB_ENV_POSTGRES_PORT"),
 	)
 
 	var err error
@@ -62,7 +62,7 @@ func main() {
 
 func serveIndex(resp http.ResponseWriter, req *http.Request) {
 	resp.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	fmt.Fprintln(resp, "Hello, World! 4")
+	fmt.Fprintln(resp, "Hello, World! 5")
 
 	fmt.Fprintln(resp, "DB_ADDR:", os.Getenv("DB_PORT_5432_TCP_ADDR"))
 	fmt.Fprintln(resp, "DB_PORT:", os.Getenv("DB_PORT_5432_TCP_PORT"))
@@ -87,6 +87,4 @@ func serveIndex(resp http.ResponseWriter, req *http.Request) {
 
 		fmt.Fprintf(resp, "ID: %d\n", id)
 	}
-
-	fmt.Println("req end")
 }
