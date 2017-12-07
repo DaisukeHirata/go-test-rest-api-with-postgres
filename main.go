@@ -62,7 +62,7 @@ func main() {
 
 func serveIndex(resp http.ResponseWriter, req *http.Request) {
 	resp.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	fmt.Fprintln(resp, "Hello, World! 2")
+	fmt.Fprintln(resp, "Hello, World! 4")
 
 	fmt.Fprintln(resp, "DB_ADDR:", os.Getenv("DB_PORT_5432_TCP_ADDR"))
 	fmt.Fprintln(resp, "DB_PORT:", os.Getenv("DB_PORT_5432_TCP_PORT"))

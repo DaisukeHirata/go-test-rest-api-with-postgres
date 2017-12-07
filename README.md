@@ -1,4 +1,4 @@
-# hellodocker
+# go-test-rest-api-with-postgres
 This is a 4 container project. I'm using `docker-compose` to bring it all up
 (AKA orchestration).
 
@@ -21,10 +21,14 @@ eval $(docker-machine env default)
 
 ## Download, Build, and Run
 ```
-git clone git@github.com:variadico/hellodocker.git
-cd hellodocker
-docker-compose build
-docker-compose up -d
+git clone https://github.com/DaisukeHirata/go-test-rest-api-with-postgres.git
+cd go-test-rest-api-with-postgres
+# for production
+export APP_ENV=production
+docker-compose up --build
+# for development
+export APP_ENV=dev
+docker-compose up --build
 ```
 
 Then fire up Chrome and point it to the Docker host IP. You can get this IP by
@@ -34,10 +38,12 @@ If you see
 `Cannot start container 8675309: Cannot link to a non running container` then
 just run `docker-compose up -d` again. I'm not sure how to prevent that.
 
+[for more info](https://medium.com/@McMenemy/godorp-docker-compose-for-development-and-production-e37fe0a58d61)
+
 ## Files
 This is what each file is doing.
 
-### `server.go`
+### `main.go`
 This run a server that listens on port `:8080` inside its container. When you
 first start it up, it will attempt to connect to Postgres and
 `create table if not exists`. When you visit `/`, it calls the `serveIndex`
