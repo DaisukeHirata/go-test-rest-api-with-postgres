@@ -24,3 +24,22 @@ go:
         # also creates entries in /etc/hosts with ip info
     ports:
         - "8080:8080" # host:container
+    volumes:
+        - ".:/go/src/app"
+    command: go run main.go
+
+proxy:
+    image: nginx:latest
+    ports:
+        - "80:80" # host:container
+        - "443:443"
+    volumes:
+        - ./nginx.conf:/etc/nginx/nginx.conf:ro
+        # connect host's ./nginx.conf with container's nginx.conf
+        # :ro == read only perms in container
+    links:
+        - go:app # [other container]:[alias in this container]
+          # creates environment variables in proxy container
+          # with ip and port info for go container
+          # also creates entries in /etc/hosts with ip info
+          
