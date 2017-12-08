@@ -10,29 +10,28 @@ wild wild web.
 
 ## Setup Docker
 
-If you're on OS X, then you'll need to use Docker Machine to setup Docker first.
-Because Docker uses some Linux-specific kernel features, you'll need VirtualBox
-in order to run Docker.
-
-```
-docker-machine create --driver virtualbox default
-eval $(docker-machine env default)
-```
+docker for mac
 
 ## Download, Build, and Run
+
 ```
 git clone https://github.com/DaisukeHirata/go-test-rest-api-with-postgres.git
 cd go-test-rest-api-with-postgres
-# for production
+```
+
+### for production
+```
 export APP_ENV=production
 docker-compose up --build
-# for development
+```
+
+### for development
+```
 export APP_ENV=dev
 docker-compose up --build
 ```
 
-Then fire up Chrome and point it to the Docker host IP. You can get this IP by
-running `docker-machine ip default`.
+Then fire up Chrome.
 
 If you see
 `Cannot start container 8675309: Cannot link to a non running container` then
@@ -49,10 +48,15 @@ With all of the test you’ve been writing for your Go application (right?!), yo
 docker-compose run go go test -v ./...
 ```
 
-### Environment Variable
+## Environment Variable
 to see environment variable
 ```
 docker-compose run go go env 
+```
+
+## Build production image
+```
+docker build -t go-test-rest-api --build-arg app_env=production . 
 ```
 
 ## Files
@@ -114,11 +118,11 @@ your code.
 ```
 connInfo := fmt.Sprintf(
 	"user=%s dbname=%s password=%s host=%s port=%s sslmode=disable",
-	"postgres",
-	"postgres",
+	os.Getenv("DB_ENV_POSTGRES_USER"),
+	os.Getenv("DB_ENV_POSTGRES_DBNAME"),
 	os.Getenv("DB_ENV_POSTGRES_PASSWORD"),
-	os.Getenv("HELLODOCKER_POSTGRES_1_PORT_5432_TCP_ADDR"),
-	os.Getenv("HELLODOCKER_POSTGRES_1_PORT_5432_TCP_PORT"),
+	os.Getenv("DB_PORT_5432_TCP_ADDR"),
+	os.Getenv("DB_ENV_POSTGRES_PORT"),
 )
 ```
 
@@ -126,14 +130,14 @@ You can make sure this information is available if you run the `env` command
 in a running container.
 
 ```
-docker exec hellodocker_go_1 env
+docker exec gotestrestapiwithpostgres_go_1 env
 ```
 
 Additionally, Docker will add entries in `/etc/hosts` that have the IP address
 of the linked container. You can verify this using this command.
 
 ```
-docker exec hellodocker_go_1 cat /etc/hosts
+docker exec gotestrestapiwithpostgres_go_1 cat /etc/hosts
 ```
 
 [here]: (https://github.com/docker-library/golang/blob/396f40c6188614c7acd6d8299a0ea71030a056a6/1.4/onbuild/Dockerfile)
