@@ -11,18 +11,19 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi"
 	_ "github.com/lib/pq"
 )
 
 // App aaa.
 type App struct {
-	Router *mux.Router
+	Router *chi.Mux
 	DB     *sql.DB
 }
 
 // Initialize create a database connection
 func (a *App) Initialize(user, dbname, password, host, port string) {
+
 	connectionString := fmt.Sprintf(
 		"user=%s dbname=%s password=%s host=%s port=%s sslmode=disable",
 		user,
@@ -50,7 +51,7 @@ func (a *App) Initialize(user, dbname, password, host, port string) {
 		log.Fatal(err)
 	}
 
-	a.Router = mux.NewRouter()
+	a.Router = chi.NewRouter()
 	a.initializeRoutes()
 
 }
@@ -61,16 +62,15 @@ func (a *App) Run(addr string) {
 }
 
 func (a *App) initializeRoutes() {
-	a.Router.HandleFunc("/products", a.getProducts).Methods("GET")
-	a.Router.HandleFunc("/product", a.createProduct).Methods("POST")
-	a.Router.HandleFunc("/product/{id:[0-9]+}", a.getProduct).Methods("GET")
-	a.Router.HandleFunc("/product/{id:[0-9]+}", a.updateProduct).Methods("PUT")
-	a.Router.HandleFunc("/product/{id:[0-9]+}", a.deleteProduct).Methods("DELETE")
+	a.Router.Get("/products", a.getProducts)
+	a.Router.Post("/product", a.createProduct)
+	a.Router.Get("/product/{id:[0-9]+}", a.getProduct)
+	a.Router.Put("/product/{id:[0-9]+}", a.updateProduct)
+	a.Router.Delete("/product/{id:[0-9]+}", a.deleteProduct)
 }
 
 func (a *App) getProduct(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid product ID")
 		return
@@ -128,8 +128,7 @@ func (a *App) createProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) updateProduct(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid product ID")
 		return
@@ -153,8 +152,7 @@ func (a *App) updateProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) deleteProduct(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid Product ID")
 		return
