@@ -65,10 +65,7 @@ This is what each file is doing.
 ### `main.go`
 This run a server that listens on port `:8080` inside its container. When you
 first start it up, it will attempt to connect to Postgres and
-`create table if not exists`. When you visit `/`, it calls the `serveIndex`
-handler and inserts data into the database. Finally, it queries all of the
-rows in the database and sends the row ID back to the web client. This can
-prove that the database is persisting across runs.
+`create table if not exists`. 
 
 ### `Dockerfile`
 This file will create a new container image by copying the Go source in your

@@ -15,7 +15,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// App aaa.
+// App.
 type App struct {
 	Router *chi.Mux
 	DB     *sql.DB
