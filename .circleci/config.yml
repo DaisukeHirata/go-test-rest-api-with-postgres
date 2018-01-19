@@ -8,3 +8,7 @@ jobs:
             name: docker-compose up
             command: |
                  docker-compose -f ./docker-compose.yml up -d
+      - run:
+            name: run integration test
+            command: |
+                 docker-compose run go go test -v ./...
