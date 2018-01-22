@@ -1,6 +1,19 @@
 version: 2
 jobs:
-  build:
+  unit_test:
+    docker:
+      # specify the version
+      - image: circleci/golang:1.9.2
+    working_directory: /go/src/github.com/DaisukeHirata/go-test-rest-api-with-postgres
+    steps:
+      - checkout
+      - run:
+         name: gofmt
+         command: test -z "$(gofmt -s -l $(find . -type f -name '*.go' -not -path "./vendor/*") | tee /dev/stderr)"
+      - run: 
+         name: go vet
+         command: go tool vet -all -shadowstrict . 2>&1
+  integration_test:
     machine: true
     steps:
       - checkout
@@ -12,3 +25,9 @@ jobs:
             name: run integration test
             command: |
                  docker-compose run go go test -v ./...
+workflows:
+  version: 2
+  ut_and_it:
+    jobs:
+      - unit_test
+      - integration_test
